@@ -1,0 +1,6 @@
+rootProject.name='shortVideoJava'
+include ':app'
+include ':libnavannotation'
+include ':libnavcomplier'
+include ':libnetwork'
+include ':libcommon'
