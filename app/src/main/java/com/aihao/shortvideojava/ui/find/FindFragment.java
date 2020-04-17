@@ -1,4 +1,4 @@
-package com.aihao.shortvideojava.ui.find.my;
+package com.aihao.shortvideojava.ui.find;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
