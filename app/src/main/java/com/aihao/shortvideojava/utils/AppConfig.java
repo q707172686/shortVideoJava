@@ -14,12 +14,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class AppConfilg {
+public class AppConfig {
     private static  HashMap<String, Destination> sDestConfig;
 
     private  static BottomBar sBottomBar;
 
-    public static HashMap<String, Destination> getsDestConfig() {
+    public static HashMap<String, Destination> getDestConfig() {
         if (sDestConfig == null){
             String content = parseFile("destination.json");
             sDestConfig = JSON.parseObject(content, new TypeReference<HashMap<String,Destination>>(){}.getType());

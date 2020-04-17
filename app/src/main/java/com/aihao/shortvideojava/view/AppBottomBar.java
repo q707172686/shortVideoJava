@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.aihao.shortvideojava.R;
 import com.aihao.shortvideojava.model.BottomBar;
 import com.aihao.shortvideojava.model.Destination;
-import com.aihao.shortvideojava.utils.AppConfilg;
+import com.aihao.shortvideojava.utils.AppConfig;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,7 +34,7 @@ public class AppBottomBar extends BottomNavigationView {
     public AppBottomBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs,defStyleAttr);
 
-         bottomBar = AppConfilg.getsBottomBar();
+         bottomBar = AppConfig.getsBottomBar();
         List<BottomBar.Tabs> tabs = bottomBar.getTabs();
         int[][] states = new int [2][];
         states[0] = new int[]{android.R.attr.state_selected};
@@ -78,7 +78,7 @@ public class AppBottomBar extends BottomNavigationView {
     }
 
     private int getId(String pageUrl) {
-        Destination destination = AppConfilg.getsDestConfig().get(pageUrl);
+        Destination destination = AppConfig.getDestConfig().get(pageUrl);
         if (destination == null) {
             return -1;
         }

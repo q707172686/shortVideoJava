@@ -28,7 +28,7 @@ public class NavGraphBuilder {
 
         NavGraph navGraph = new NavGraph(new NavGraphNavigator(provider));
 
-        HashMap<String, Destination> destConfig = AppConfilg.getsDestConfig();
+        HashMap<String, Destination> destConfig = AppConfig.getDestConfig();
         for (Destination value : destConfig.values()) {
             if(value.isIsFragment()){
                 FragmentNavigator.Destination destination = fragmentNavigator.createDestination();
