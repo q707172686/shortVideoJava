@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "545357386192",
+    "firebase_url": "https://jetpack-274810.firebaseio.com",
+    "project_id": "jetpack-274810",
+    "storage_bucket": "jetpack-274810.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545357386192:android:32c5f3873a5c1b00c1a9d5",
+        "android_client_info": {
+          "package_name": "com.aihao.shortvideojava"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545357386192-3t59pp8ae5usr7r6fgnfnjuh23jqf7f9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aihao.shortvideojava",
+            "certificate_hash": "326949ff16b62d340ad49883978fc049e74ed9dc"
+          }
+        },
+        {
+          "client_id": "545357386192-i95qm9a4al9ba6aiee84dm48igb8mdr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiPPN7Z_zb8bYUmjkDBRhcpp23s6AXOVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545357386192-i95qm9a4al9ba6aiee84dm48igb8mdr8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

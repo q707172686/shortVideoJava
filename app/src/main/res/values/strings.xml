@@ -4,6 +4,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="login_text">QQ快捷登录</string>
+    <string name="login_google">Google快捷登录</string>
     <string name="has_follow">已关注</string>
     <string name="unfollow">关注</string>
     <string name="feed_detil_hint">友善的皮才是真的皮</string>

@@ -29,6 +29,9 @@ public class HomeViewModel extends AbsViewModel<Feed> {
     private volatile boolean witchCache = true;
     private MutableLiveData<PagedList<Feed>> cacheLiveData = new MutableLiveData<>();
     private AtomicBoolean loadAfter = new AtomicBoolean(false);
+    private String mFeedType;
+    //TODO
+    private static final  long userId = 1587265663;
 
     @Override
     public DataSource createDataSource() {
@@ -66,6 +69,11 @@ public class HomeViewModel extends AbsViewModel<Feed> {
         }
     };
 
+    public void setFeedType(String feedType) {
+
+        mFeedType = feedType;
+    }
+
     private void loadData(int key, ItemKeyedDataSource.LoadCallback<Feed> callback) {
         if (key > 0) {
             loadAfter.set(true);
@@ -84,7 +92,7 @@ public class HomeViewModel extends AbsViewModel<Feed> {
             request.execute(new JsonCallback<List<Feed>>() {
                 @Override
                 public void onCacheSuccess(ApiResponse<List<Feed>> response) {
-                    Log.e("loadData", "onCacheSuccess: "+response.body.size());
+                   // Log.e("loadData", "onCacheSuccess: "+response.body.size());
                    MutableDataSource dataSource = new MutableDataSource<Integer, Feed>();
                    dataSource.data.addAll(response.body);
 

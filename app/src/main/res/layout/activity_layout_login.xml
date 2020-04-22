@@ -23,17 +23,32 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/action_login"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_45"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/dp_30"
-        android:layout_marginRight="@dimen/dp_30"
-        android:layout_marginBottom="150dp"
-        android:gravity="center"
-        android:text="@string/login_text"
-        android:textColor="@color/color_white"
-        android:textSize="@dimen/sp_16"
-        app:backgroundTint="@color/color_theme"
-        app:cornerRadius="25dp"></com.google.android.material.button.MaterialButton>
+    android:id="@+id/action_login"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_45"
+    android:layout_gravity="bottom"
+    android:layout_marginLeft="@dimen/dp_30"
+    android:layout_marginRight="@dimen/dp_30"
+    android:layout_marginBottom="150dp"
+    android:gravity="center"
+    android:text="@string/login_text"
+    android:textColor="@color/color_white"
+    android:textSize="@dimen/sp_16"
+    app:backgroundTint="@color/color_theme"
+    app:cornerRadius="25dp"></com.google.android.material.button.MaterialButton>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_30"
+            android:layout_marginBottom="60dp"
+            android:visibility="visible"
+            android:text="@string/login_google"
+            android:layout_below="@id/action_login"
+            android:layout_gravity="bottom"
+            app:cornerRadius="25dp"
+          />
 </FrameLayout>

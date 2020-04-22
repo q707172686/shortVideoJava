@@ -94,5 +94,7 @@ dependencies {
 
     //fastjson解析
     api 'com.alibaba:fastjson:1.2.59'
+
+
 }
 
