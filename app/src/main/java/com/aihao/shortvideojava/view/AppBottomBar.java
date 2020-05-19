@@ -3,6 +3,7 @@ package com.aihao.shortvideojava.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -52,7 +53,18 @@ public class AppBottomBar extends BottomNavigationView {
             if (!tab.isEnable())
                 return;;
             int id = getId(tab.getPageUrl());
-            MenuItem item = getMenu().add(0,id,tab.getIndex(),tab.getTitle());
+            Resources res = getResources();
+            String title ="";
+            if("Home".equals(tab.getTitle())){
+                title = res.getString(R.string.home);
+            } else if("Sofa".equals(tab.getTitle())) {
+                title = res.getString(R.string.sofa);
+            } else if("Find".equals(tab.getTitle())) {
+                title = res.getString(R.string.find);
+            }else if("My".equals(tab.getTitle())) {
+                title = res.getString(R.string.my);
+            }
+            MenuItem item = getMenu().add(0,id,tab.getIndex(),title);
             item.setIcon(sIcons[tab.getIndex()]);
 
         }

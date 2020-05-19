@@ -4,22 +4,32 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.paging.PagedListAdapter;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.aihao.shortvideojava.model.Feed;
+import com.aihao.libcommon.extention.AbsPagedListAdapter;
+import com.aihao.libcommon.extention.LiveDataBus;
+import com.aihao.shortvideojava.BR;
 import com.aihao.shortvideojava.databinding.LayoutFeedTypeImageBinding;
 import com.aihao.shortvideojava.databinding.LayoutFeedTypeVideoBinding;
+import com.aihao.shortvideojava.model.Feed;
+import com.aihao.shortvideojava.ui.InteractionPresenter;
+import com.aihao.shortvideojava.ui.detail.FeedDetailActivity;
+import com.aihao.shortvideojava.view.ListPlayerView;
 
-public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
+
+public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolder> {
     private final LayoutInflater inflater;
-    private Context mContext;
-    private String mCategory;
+    protected Context mContext;
+    protected String mCategory;
+
 
     public FeedAdapter(Context context, String category) {
         super(new DiffUtil.ItemCallback<Feed>() {
@@ -58,14 +68,65 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
+        ViewDataBinding binding = DataBindingUtil.inflate(inflater, viewType, parent, false);
+        return new ViewHolder(binding.getRoot(), binding);
+    }
 
-        holder.bindData(getItem(position));
+    @Override
+    protected void onBindViewHolder2(ViewHolder holder, int position) {
+        final Feed feed = getItem(position);
+
+        holder.bindData(feed);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedDetailActivity.startFeedDetailActivity(mContext, feed, mCategory);
+                onStartFeedDetailActivity(feed);
+                if (mFeedObserver == null) {
+                    mFeedObserver = new FeedObserver();
+                    LiveDataBus.get()
+                            .with(InteractionPresenter.DATA_FROM_INTERACTION)
+                            .observe((LifecycleOwner) mContext, mFeedObserver);
+                }
+                mFeedObserver.setFeed(feed);
+            }
+        });
+    }
+
+    private FeedObserver mFeedObserver;
+
+    private class FeedObserver implements Observer<Feed> {
+
+        private Feed mFeed;
+
+        @Override
+        public void onChanged(Feed newOne) {
+            if (mFeed.id != newOne.id)
+                return;
+            mFeed.author = newOne.author;
+            mFeed.ugc = newOne.ugc;
+            mFeed.notifyChange();
+        }
+
+        public void setFeed(Feed feed) {
+
+            mFeed = feed;
+        }
+    }
+
+
+    public void onStartFeedDetailActivity(Feed feed) {
+
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ViewDataBinding mBinding;
+        public ListPlayerView listPlayerView;
+        public ImageView feedImage;
 
         public ViewHolder(@NonNull View itemView, ViewDataBinding binding) {
             super(itemView);
@@ -73,17 +134,32 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
         }
 
         public void bindData(Feed item) {
+            //这里之所以手动绑定数据的原因是 图片 和视频区域都是需要计算的
+            //而dataBinding的执行默认是延迟一帧的。
+            //当列表上下滑动的时候 ，会明显的看到宽高尺寸不对称的问题
+
+            mBinding.setVariable(BR.feed, item);
+            mBinding.setVariable(BR.lifeCycleOwner, mContext);
             if (mBinding instanceof LayoutFeedTypeImageBinding) {
                 LayoutFeedTypeImageBinding imageBinding = (LayoutFeedTypeImageBinding) mBinding;
-                imageBinding.setFeed(item);
+                feedImage = imageBinding.feedImage;
                 imageBinding.feedImage.bindData(item.width, item.height, 16, item.cover);
-                imageBinding.setLifeCycleOwner((LifecycleOwner) mContext);
-            } else {
+                //imageBinding.setFeed(item);
+                //imageBinding.interactionBinding.setLifeCycleOwner((LifecycleOwner) mContext);
+            } else if (mBinding instanceof LayoutFeedTypeVideoBinding) {
                 LayoutFeedTypeVideoBinding videoBinding = (LayoutFeedTypeVideoBinding) mBinding;
-                videoBinding.setFeed(item);
                 videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
-                videoBinding.setLifeCycleOwner((LifecycleOwner) mContext);
+                listPlayerView = videoBinding.listPlayerView;
+                //videoBinding.setFeed(item);
+                //videoBinding.interactionBinding.setLifeCycleOwner((LifecycleOwner) mContext);
             }
+        }
+        public boolean isVideoItem() {
+            return mBinding instanceof LayoutFeedTypeVideoBinding;
+        }
+
+        public ListPlayerView getListPlayerView() {
+            return listPlayerView;
         }
     }
 }

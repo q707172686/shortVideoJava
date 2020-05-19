@@ -1,39 +1,71 @@
 package com.aihao.shortvideojava.ui.my;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.aihao.libcommon.utils.StatusBar;
 import com.aihao.libnavannotation.FragmentDestination;
 import com.aihao.shortvideojava.R;
+import com.aihao.shortvideojava.databinding.FragmentMyBinding;
+import com.aihao.shortvideojava.model.User;
+import com.aihao.shortvideojava.ui.login.UserManager;
 
-@FragmentDestination(pageUrl = "main/tabs/my",asStarter = false)
+@FragmentDestination(pageUrl = "main/tabs/my", needLogin = true)
 public class MyFragment extends Fragment {
+    private FragmentMyBinding mBinding;
 
-    private MyViewModel myViewModel;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mBinding = FragmentMyBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
+    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        Log.i( "info","MyCreate");
-        myViewModel =
-                ViewModelProviders.of(this).get(MyViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        myViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        User user = UserManager.get().getUser();
+        mBinding.setUser(user);
+
+        UserManager.get().refresh().observe(this, newUser -> {
+            if (newUser != null) {
+                mBinding.setUser(newUser);
             }
         });
-        return root;
+
+        mBinding.actionLogout.setOnClickListener(v -> new AlertDialog.Builder(getContext())
+                .setMessage(getString(R.string.fragment_my_logout))
+                .setPositiveButton(getString(R.string.fragment_my_logout_ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    UserManager.get().logout();
+                    getActivity().onBackPressed();
+                }).setNegativeButton(getString(R.string.fragment_my_logout_cancel), null)
+                .create().show());
+
+        mBinding.goDetail.setOnClickListener(v -> ProfileActivity.startProfileActivity(getContext(), ProfileActivity.TAB_TYPE_ALL));
+        mBinding.userFeed.setOnClickListener(v -> ProfileActivity.startProfileActivity(getContext(), ProfileActivity.TAB_TYPE_FEED));
+        mBinding.userComment.setOnClickListener(v -> ProfileActivity.startProfileActivity(getContext(), ProfileActivity.TAB_TYPE_COMMENT));
+        mBinding.userFavorite.setOnClickListener(v -> UserBehaviorListActivity.startBehaviorListActivity(getContext(), UserBehaviorListActivity.BEHAVIOR_FAVORITE));
+        mBinding.userHistory.setOnClickListener(v -> UserBehaviorListActivity.startBehaviorListActivity(getContext(), UserBehaviorListActivity.BEHAVIOR_HISTORY));
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        StatusBar.lightStatusBar(getActivity(), false);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        StatusBar.lightStatusBar(getActivity(), hidden);
     }
 }

@@ -1,5 +1,5 @@
 {
-  "activeColor": "#333333",
+  "activeColor": "#81F79F",
   "inActiveColor": "#666666",
   "selectTab": 0,
   "tabs": [
@@ -8,14 +8,14 @@
       "enable": true,
       "index": 0,
       "pageUrl": "main/tabs/home",
-      "title": "首页"
+      "title": "Home"
     },
     {
       "size": 24,
       "enable": true,
       "index": 1,
       "pageUrl": "main/tabs/sofa",
-      "title": "沙发"
+      "title": "Sofa"
     },
     {
       "size": 40,
@@ -30,14 +30,14 @@
       "enable": true,
       "index": 3,
       "pageUrl": "main/tabs/find",
-      "title": "发现"
+      "title": "Find"
     },
     {
       "size": 24,
       "enable": true,
       "index": 4,
       "pageUrl": "main/tabs/my",
-      "title": "我的"
+      "title": "My"
     }
   ]
 }

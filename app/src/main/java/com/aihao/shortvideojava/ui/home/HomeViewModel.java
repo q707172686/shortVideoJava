@@ -17,6 +17,7 @@ import com.aihao.libnetwork.Request;
 import com.aihao.shortvideojava.model.Feed;
 import com.aihao.shortvideojava.ui.AbsViewModel;
 import com.aihao.shortvideojava.ui.MutableDataSource;
+import com.aihao.shortvideojava.ui.login.UserManager;
 import com.alibaba.fastjson.TypeReference;
 
 import java.util.ArrayList;
@@ -30,8 +31,6 @@ public class HomeViewModel extends AbsViewModel<Feed> {
     private MutableLiveData<PagedList<Feed>> cacheLiveData = new MutableLiveData<>();
     private AtomicBoolean loadAfter = new AtomicBoolean(false);
     private String mFeedType;
-    //TODO
-    private static final  long userId = 1587265663;
 
     @Override
     public DataSource createDataSource() {
@@ -80,8 +79,8 @@ public class HomeViewModel extends AbsViewModel<Feed> {
         }
 ///feeds/queryHotFeedsList
         Request request = ApiService.get("/feeds/queryHotFeedsList")
-                .addParam("feedType", null)
-                .addParam("userId", 0)
+                .addParam("feedType", mFeedType)
+                .addParam("userId", UserManager.get().getUserId())
                 .addParam("feedId", key)
                 .addParam("pageCount", 10)
                 .responseType(new TypeReference<ArrayList<Feed>>() {
@@ -94,12 +93,14 @@ public class HomeViewModel extends AbsViewModel<Feed> {
                 public void onCacheSuccess(ApiResponse<List<Feed>> response) {
                    // Log.e("loadData", "onCacheSuccess: "+response.body.size());
                    MutableDataSource dataSource = new MutableDataSource<Integer, Feed>();
+                   if (response.body != null)
                    dataSource.data.addAll(response.body);
 
                    PagedList pagedList = dataSource.buildNewPagedList(config);
                    cacheLiveData.postValue(pagedList);
                 }
             });
+
         }
 
         try {

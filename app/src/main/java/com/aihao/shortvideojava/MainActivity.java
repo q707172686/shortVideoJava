@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.aihao.libcommon.utils.StatusBar;
 import com.aihao.shortvideojava.model.Destination;
 import com.aihao.shortvideojava.model.User;
 import com.aihao.shortvideojava.ui.login.UserManager;
@@ -29,16 +30,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private AppBottomBar navView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //势必要在进入主页后,把窗口背景清理掉
+        setTheme(R.style.AppTheme);
+        //启用沉浸式布局，白底黑字
+        StatusBar.fitSystemBar(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navController = NavHostFragment.findNavController(fragment);
         NavGraphBuilder.build(navController,this,fragment.getId());
-
         navView.setOnNavigationItemSelectedListener(this);
-
 
     }
 
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 UserManager.get().login(this).observe(this, new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
-                        navView.setSelectedItemId(menuItem.getItemId());
+                            navView.setSelectedItemId(menuItem.getItemId());
                     }
                 });
                 return false;
